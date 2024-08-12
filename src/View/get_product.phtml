@@ -1,0 +1,330 @@
+<div class="product-card">
+    <div class="badge">Hot</div>
+    <div class="product-tumb">
+        <img src="./img/<?php echo $product->getImage()?>" alt="">
+    </div>
+    <div class="product-details">
+        <h4><a href=""> <?php echo $product->getTitle(); ?></a></h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, possimus nostrum!</p>
+        <div class="product-bottom-details">
+            <div class="product-price"><small><?php echo $product->getPriceCommon() ?></small><?php echo $product->getPriceDiscount() ?></div>
+            <div class="product-links">
+                <a href=""><i class="fa fa-heart"></i></a>
+                <a href=""><i class="fa fa-shopping-cart"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <?php
+        foreach ($commentsProduct as $comment):
+    ?>
+
+    <div class="wrapper">
+        <p><span>Chris Fox.</span> CEO at Mighty Schools.</p>
+        <p><?php echo $comment->getComment() ?></p>
+
+        <img style="width: 200px"  src="../uploadImg/<?php echo $comment->getImageFile()?>" alt="">
+
+    </div>
+
+    <?php endforeach; ?>
+
+
+
+<section class = "blockComment">
+    <form ENCTYPE="multipart/form-data" action="/comment"  method="post" class = "">
+        <input type="hidden" name = "product_id" value="<?php echo $product->getId() ?>">
+
+        <textarea name="comment" id="comment-field" cols="30" rows="10" placeholder="Написать отзыв" required></textarea>
+
+        <input type="file" name = "upfile" value="">
+
+        <input type="submit" value="Отправить"/>
+    </form>
+
+</section>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $("document").ready(function() {
+        $('.comment').on('click', function(event) {
+            event.preventDefault();
+            var form = $(this);
+            var productId = form.find("input[name='product_id']").val();
+            var comment = form.find("textarea[name='comment']").val();
+            $.ajax({
+                type: "POST",
+                url: "/comment",
+                data: { 'product_id': productId,
+                        'comment' : comment},
+                success: function(data) {
+                    console.log(data);
+                    console.log('done');
+                    form.find("textarea[name='comment']").val("");
+                }
+
+
+            });
+        });
+
+
+    });
+
+</script>
+
+<style>
+
+    @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
+    *
+    {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+
+    body
+    {
+        font-family: 'Roboto', sans-serif;
+    }
+    a
+    {
+        text-decoration: none;
+    }
+
+    .blockComment {
+        border: 2px solid black;
+        padding: 5px;
+    }
+    .product-card {
+        width: 380px;
+        position: relative;
+        box-shadow: 0 2px 7px #dfdfdf;
+        margin: 50px auto;
+        background: #fafafa;
+    }
+
+    .badge {
+        position: absolute;
+        left: 0;
+        top: 20px;
+        text-transform: uppercase;
+        font-size: 13px;
+        font-weight: 700;
+        background: red;
+        color: #fff;
+        padding: 3px 10px;
+    }
+
+    .product-tumb {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 300px;
+        padding: 50px;
+        background: #f0f0f0;
+    }
+
+    .product-tumb img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .product-details {
+        padding: 30px;
+    }
+
+    .product-catagory {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #ccc;
+        margin-bottom: 18px;
+    }
+
+    .product-details h4 a {
+        font-weight: 500;
+        display: block;
+        margin-bottom: 18px;
+        text-transform: uppercase;
+        color: #363636;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .product-details h4 a:hover {
+        color: #fbb72c;
+    }
+
+    .product-details p {
+        font-size: 15px;
+        line-height: 22px;
+        margin-bottom: 18px;
+        color: #999;
+    }
+
+    .product-bottom-details {
+        overflow: hidden;
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+    }
+
+    .product-bottom-details div {
+        float: left;
+        width: 50%;
+    }
+
+    .product-price {
+        font-size: 18px;
+        color: #fbb72c;
+        font-weight: 600;
+    }
+
+    .product-price small {
+        font-size: 80%;
+        font-weight: 400;
+        text-decoration: line-through;
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .product-links {
+        text-align: right;
+    }
+
+    .product-links a {
+        display: inline-block;
+        margin-left: 5px;
+        color: #e1e1e1;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+
+    .product-links a:hover {
+        color: #fbb72c;
+    }
+
+
+    @font-face {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        src: local('Montserrat-Regular'), url(http://themes.googleusercontent.com/static/fonts/montserrat/v4/zhcz-_WihjSQC0oHJ9TCYBsxEYwM7FgeyaSgU71cLG0.woff) format('woff');
+    }
+
+    @font-face {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Montserrat-Bold'), url(http://themes.googleusercontent.com/static/fonts/montserrat/v4/IQHow_FEYlDC4Gzy_m8fcgFhaRv2pGgT5Kf0An0s4MM.woff) format('woff');
+    }
+
+    * {
+        margin:0px;
+        padding: 0px;
+    }
+    body {
+        background-image: url('http://imgh.us/4._background.jpg');
+        background-repeat: no-repeat;
+        background-size: 100%;
+    }
+
+    input, textarea {
+        position: relative;
+        display: block;
+        margin:0 auto;
+        width:70%;
+        height: 100px;
+        padding-left:60px;
+        margin-bottom: 20px;
+        background-repeat: no-repeat;
+        font-family: Montserrat;
+        font-size:22px;
+    }
+
+    input:focus, textarea:focus {
+        box-shadow: 0px 0px 10px #0099CC;
+    }
+    input[type="text"] {
+        background-size:40px;
+        background-position: left center;
+        background-position: 10px;
+        height: 60px;
+    }
+
+
+    input#name {
+        background-image: url('http://imgh.us/5._name.svg');
+    }
+
+    input#email {
+        background-image: url('http://imgh.us/6._email.svg');
+    }
+
+    textarea#comment-field {
+        background-image: url('http://imgh.us/7._comment.svg');
+        background-size:40px;
+        background-position: 10px 10px;
+        padding-top:20px;
+        color:#0099CC;
+    }
+
+    input[type="submit"] {
+        padding: 0;
+        width:50%;
+        height: 70px;
+        background:#0099CC;
+        border:4px solid white;
+        color:white;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:active {
+        background: white;
+        color:#0099CC;
+    }
+
+    .wrapper {
+        border: 2px solid #ccc;
+        background-color: #eee;
+        border-radius: 5px;
+        padding: 16px;
+        margin: 16px 0;
+    }
+
+    /* Clear floats after containers */
+    .wrapper::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    /* Float images inside the container to the left. Add a right margin, and style the image as a circle */
+    .wrapper img {
+        float: left;
+        margin-right: 20px;
+        border-radius: 10%;
+    }
+
+    /* Increase the font-size of a span element */
+    .wrapper span {
+        font-size: 20px;
+        margin-right: 15px;
+    }
+
+    /* Add media queries for responsiveness. This will center both the text and the image inside the container */
+    @media (max-width: 500px) {
+        .wrapper {
+            text-align: center;
+        }
+
+        .wrapper img {
+            margin: auto;
+            float: none;
+            display: block;
+        }
+    }
+</style>

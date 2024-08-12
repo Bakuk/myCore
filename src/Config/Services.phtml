@@ -1,0 +1,47 @@
+<?php
+
+use Controller\CartController;
+use Controller\FavoriteController;
+use Controller\OrderController;
+use Controller\ProductController;
+use Controller\UserController;
+
+return [
+    UserController::class => function () {
+        $authenticationService = new \Service\Authentication\SessionAuthenticationService();
+        $viewRenderer = new \Core\src\ViewRenderer();
+        return new UserController($authenticationService, $viewRenderer);
+    },
+    ProductController::class => function () {
+        $authenticationService = new \Service\Authentication\SessionAuthenticationService();
+        $cartService = new \Service\CartService();
+        $viewRenderer = new \Core\src\ViewRenderer();
+        $commentFileService = new \Service\CommentFileService();
+        return new ProductController($authenticationService, $cartService, $commentFileService, $viewRenderer);
+    },
+    CartController::class => function (){
+        $authenticationService = new \Service\Authentication\SessionAuthenticationService();
+        $viewRenderer = new \Core\src\ViewRenderer();
+        return new CartController($authenticationService, $viewRenderer);
+    },
+    OrderController::class => function (\Core\src\Container\Container $container){
+        $authenticationService = new \Service\Authentication\SessionAuthenticationService();
+        $orderService = new \Service\OrderService();
+        $viewRenderer = new \Core\src\ViewRenderer();
+        return new OrderController($authenticationService, $orderService, $viewRenderer);
+    },
+    FavoriteController::class => function (){
+        $authenticationService = new \Service\Authentication\SessionAuthenticationService();
+        $favoriteService = new \Service\FavoriteService();
+        $viewRenderer = new \Core\src\ViewRenderer();
+        return new FavoriteController($authenticationService, $favoriteService, $viewRenderer);
+    },
+    PDO::class => function () {
+        $host = getenv('DB_HOST', 'db');
+        $db = getenv('DB_NAME', 'dbtest');
+        $user = getenv('DB_USER', 'dbuser');
+        $password = getenv('DB_PASSWORD', 'dbpwd');
+
+        return new PDO("pgsql:host=$host;dbname=$db", $user, $password);
+    },
+];

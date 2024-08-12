@@ -1,0 +1,460 @@
+<div>
+    <a href="/logout"><button class="logout-btn">Logout</button></a>
+</div>
+
+
+
+<a href="/cart"><div class="b-cart">Cart (<span class="b-cart__count"><?php echo $count ?? 0?></span>)</div></a>
+<a href="/favorite"><div class="b-cart">Favorite (<span class="b-cart__favorite"><?php echo $countFavorite ?? 0?></span>)</div></a>
+<h1 style="text-align: center">Каталог товаров</h1>
+
+
+<div class = "cards">
+    <?php
+        foreach ($products as $product):
+    ?>
+
+    <div>
+        <div class="card">
+            <!-- Верхняя часть -->
+            <div class="card__top">
+                <!-- Изображение-ссылка товара -->
+                <a href="#" class="card__image">
+                    <img
+                            src="./img/<?php echo $product->getImage()?>"
+                            alt="Apple IPhone 14 PRO Max Gold"
+                    />
+                </a>
+                <!-- Скидка на товар -->
+                <div class="card__label"><?php echo $product->getCardLabel() ?></div>
+            </div>
+            <!-- Нижняя часть -->
+            <div class="card__bottom">
+                <!-- Цены на товар (с учетом скидки и без)-->
+                <div class="card__prices">
+                    <div class="card__price card__price--discount"><?php echo $product->getPriceDiscount() ?></div>
+                    <div class="card__price card__price--common"><?php echo $product->getPriceCommon() ?></div>
+                </div>
+                <!-- Ссылка-название товара -->
+                <a href="#" class="card__title">
+                    <?php echo $product->getTitle(); ?>
+                </a>
+
+                <div style="text-align: center; margin-bottom: 10px">Количество</div>
+                <div class="number" data-step="1" data-min="1" data-max="100">
+
+                    <form  method="post" class = "minusForm">
+                        <input type="hidden" name = "product_id" value="<?php echo $product->getId() ?>">
+                        <input type="submit"  class="number-minus" value="-" name = 'minus'>
+                    </form>
+
+                    <form  method="post" class = "plusForm">
+                        <input type="hidden" name = "product_id" value="<?php echo $product->getId() ?>">
+                        <input type="submit" class="number-plus" value="+" name = 'plus'>
+                    </form>
+
+                </div>
+
+                <form action="/favorite"  method="post" class = "favoriteForm">
+                    <input type="hidden" name = "product_id" value="<?php echo $product->getId() ?>">
+                    <input type="submit" class="favoriteBtn" value="В избранное" name = 'favorite'>
+                </form>
+
+                <form action="/product"  method="post" class = "ProductForm">
+                    <input type="hidden" name = "product_id" value="<?php echo $product->getId() ?>">
+                    <input type="submit" class="favoriteBtn" value="Просмотр" name = 'favorite'>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php endforeach; ?>
+
+</div>
+
+
+<style>
+    a {
+        text-decoration: none;
+    }
+    input{
+        border: none;
+    }
+    .card {
+        width: 225px;
+        min-height: 350px;
+        box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column; /* Размещаем элементы в колонку */
+        border-radius: 4px;
+        transition: 0.2s;
+        position: relative;
+    }
+
+    /* При наведении на карточку - меняем цвет тени */
+    .card:hover {
+        box-shadow: 4px 8px 16px rgba(255, 102, 51, 0.2);
+    }
+
+    .card__top {
+        flex: 0 0 220px; /* Задаем высоту 220px, запрещаем расширение и сужение по высоте */
+        position: relative;
+        overflow: hidden; /* Скрываем, что выходит за пределы */
+    }
+
+    /* Контейнер для картинки */
+    .card__image {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .card__image > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Встраиваем картинку в контейнер card__image */
+        transition: 0.2s;
+    }
+
+    /* При наведении - увеличиваем картинку */
+    .card__image:hover > img {
+        transform: scale(1.1);
+    }
+
+    /* Размещаем скидку на товар относительно изображения */
+    .card__label {
+        padding: 4px 8px;
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        background: #ff6633;
+        border-radius: 4px;
+        font-weight: 400;
+        font-size: 16px;
+        color: #fff;
+    }
+
+    .card__bottom {
+        display: flex;
+        flex-direction: column;
+        flex: 1 0 auto; /* Занимаем всю оставшуюся высоту карточки */
+        padding: 10px;
+    }
+
+    .card__prices {
+        display: flex;
+        margin-bottom: 10px;
+        flex: 0 0 50%; /* Размещаем цены равномерно в две колонки */
+    }
+
+    .card__price::after {
+        content: "₽";
+        margin-left: 4px;
+        position: relative;
+    }
+
+    .card__price--discount {
+        font-weight: 700;
+        font-size: 19px;
+        color: #414141;
+        display: flex;
+        flex-wrap: wrap-reverse;
+    }
+
+    .card__price--discount::before {
+        content: "Со скидкой";
+        font-weight: 400;
+        font-size: 13px;
+        color: #bfbfbf;
+    }
+
+    .card__price--common {
+        font-weight: 400;
+        font-size: 17px;
+        color: #606060;
+        display: flex;
+        flex-wrap: wrap-reverse;
+        justify-content: flex-end;
+    }
+
+    .card__price--common::before {
+        content: "Обычная";
+        font-weight: 400;
+        font-size: 13px;
+        color: #bfbfbf;
+    }
+
+    .card__title {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 400;
+        font-size: 17px;
+        line-height: 150%;
+        color: #414141;
+    }
+
+    .card__title:hover {
+        color: #ff6633;
+    }
+
+    .card__add {
+        display: block;
+        width: 100%;
+        font-weight: 400;
+        font-size: 17px;
+        color: #70c05b;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #70c05b;
+        border-radius: 4px;
+        cursor: pointer; /* Меняем курсор при наведении */
+        transition: 0.2s;
+        margin-top: 20px; /* Прижимаем кнопку к низу карточки */
+    }
+
+    .card__add:hover {
+        border: 1px solid #ff6633;
+        background-color: #ff6633;
+        color: #fff;
+    }
+
+    .cards {
+        display: grid;
+        /* Автоматически заполняем на всю ширину grid-контейнера */
+        grid-template-columns: repeat(auto-fill, 225px);
+        width: 100%;
+        max-width: 1000px; /* Ширина grid-контейнера */
+        justify-content: center;
+        justify-items: center; /* Размещаем карточку по центру */
+        column-gap: 30px; /* Отступ между колонками */
+        row-gap: 40px; /* Отступ между рядами */
+        margin: 0 auto;
+    }
+
+    .number {
+        margin: 0 auto;
+        user-select: none;
+        position: relative;
+        text-align: left;
+        padding: 0;
+        width: 140px;
+
+        display: inline-block;
+        margin-bottom: 50px;
+    }
+    .number-minus, .number-plus {
+        position: absolute;
+        top: 0;
+        width: 40px;
+        height: 32px;
+        line-height: 32px;
+        display: block;
+        background: #faf4f2;
+        font-size: 20px;
+        font-weight: 600;
+        text-align: center;
+        font-family: arial;
+        color: #3e1e02;
+        text-decoration: none;
+    }
+    .favoriteBtn{
+        width: 200px;
+        height: 32px;
+        margin-bottom: 20px;
+        line-height: 32px;
+        display: block;
+        background: #faf4f2;
+        font-size: 20px;
+        font-weight: 600;
+        text-align: center;
+        font-family: arial;
+        color: #3e1e02;
+        text-decoration: none;
+    }
+    .number-minus {
+        left: 0;
+        border-right: 1px solid #ddd;
+    }
+    .number-plus {
+        right: 0;
+        border-left: 1px solid #ddd;
+    }
+    .number-minus:hover, .number-plus:hover {
+        background: #ff6633;
+    }
+    .number-minus:active, .number-plus:active {
+        background: #e8e4e2;
+    }
+
+    .favoriteBtn:hover {
+        background: #ff6633;
+    }
+    .favoriteBtn:active {
+        background: #e8e4e2;
+    }
+    .number-text{
+        display: inline-block;
+        font-size: 14px;
+        color: #000;
+        line-height: 32px;
+        height: 32px;
+        padding: 0;
+        margin: 0 0 0 42px;
+        background: #fff;
+        outline: none;
+        border: none;
+        width: 57px;
+        text-align: center;
+    }
+
+    .b-cart {
+        width: 150px;
+        height: 40px;
+        background: #E74C3C;
+        color: #fff;
+        text-align: center;
+        font-family: "Helvetica Neue";
+        font-size: 21px;
+        padding-top: 13px;
+        border-bottom: 3px solid #d83d2d;
+        border-radius: 4px;
+        margin: 0 auto;
+        margin-bottom: 50px;
+
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    .logout-btn {
+        font-family: Hack, monospace;
+        background: #d3d3d3;
+        color: #2c2c2c;
+        cursor: pointer;
+        font-size: 1.5em;
+        padding: 0.5rem;
+        border: 0;
+        transition: all 0.5s;
+        border-radius: 10px;
+        width: auto;
+        position: relative;
+        float: right;
+        min-width: 150px;
+        margin-bottom: 10px;
+        margin-right: 0px;
+        &::after {
+            content: "\f2f5";
+            font-family: "Font Awesome 5 Pro";
+            font-weight: 400;
+            position: absolute;
+            left: 80%;
+            top: 54%;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+
+        }
+
+        &:hover {
+            background: #2b2bff;
+            transition: all 0.5s;
+            border-radius: 10px;
+            box-shadow: 0px 6px 15px #0000ff61;
+            padding: 1.5rem 3rem 1.5rem 1.5rem;
+            color: #ffffff;
+            &::after {
+                opacity: 1;
+                transition: all 0.5s;
+                color: #ffffff;
+
+            }
+        }
+
+
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $("document").ready(function() {
+        $('.plusForm').on('click', function(event) {
+            event.preventDefault();
+
+            var form = $(this);
+            var productId = form.find("input[name='product_id']").val();
+            $.ajax({
+                type: "POST",
+                url: "/plus",
+                data: { 'product_id': productId },
+                success: function(data) {
+                    console.log(data);
+                    console.log('done');
+                    updateCountPlus();
+                }
+            });
+        });
+
+        $('.minusForm').on('click', function(event) {
+            event.preventDefault();
+
+            var form = $(this);
+            var productId = form.find("input[name='product_id']").val();
+            $.ajax({
+                type: "POST",
+                url: "/minus",
+                data: { 'product_id': productId },
+                success: function() {
+                    console.log('done');
+                    updateCountMinus();
+                }
+            });
+        });
+
+        $('.favoriteForm').on('click', function(event) {
+            event.preventDefault();
+
+            var form = $(this);
+            var productId = form.find("input[name='product_id']").val();
+            $.ajax({
+                type: "POST",
+                url: "/favorite",
+                data: { 'product_id': productId },
+                success: function() {
+                    console.log('done');
+                    updateFavorite();
+                }
+            });
+        });
+
+
+        function updateCountPlus() {
+            var count = parseInt($('.b-cart__count').text());
+            count+=1;
+            $('.b-cart__count').text(count);
+        }
+
+        function updateCountMinus() {
+            var count = parseInt($('.b-cart__count').text());
+
+            if(count <= 0) {
+                count = 0;
+            }else {
+                count-=1;
+            }
+            $('.b-cart__count').text(count);
+
+        }
+
+        function updateFavorite() {
+            var count = parseInt($('.b-cart__favorite').text());
+            count+=1;
+            $('.b-cart__favorite').text(count);
+        }
+
+    });
+
+</script>

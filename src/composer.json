@@ -1,0 +1,10 @@
+{
+    "require": {
+        "php": "^8.0",
+        "bakuk/online-shop": "^1.0"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    }
+}
