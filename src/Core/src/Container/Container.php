@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\src\Container;
+namespace bakuk\Core\Container;
 
 class Container
 {

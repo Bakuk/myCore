@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\src\Request;
+namespace bakuk\Core\Request;
 
 class Request
 {

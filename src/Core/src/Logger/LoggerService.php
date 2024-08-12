@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\src\Logger;
+namespace bakuk\Core\Logger;
 
 use Throwable;
 

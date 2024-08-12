@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\src\Model;
+namespace bakuk\Core\Model;
 
 use PDO;
 

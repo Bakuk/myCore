@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\src;
+namespace bakuk\Core;
 class Autoloader
 {
     public static function registrate()

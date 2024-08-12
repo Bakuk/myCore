@@ -1,18 +1,25 @@
 {
-    "name": "bakuk/my-core",
-    "description": "My first package",
-    "type": "library",
+    "name": "bakuk/core",
     "autoload": {
         "psr-4": {
-            "bakuk\\MyCore\\": "src/"
+            "bakuk\\Core\\": "src/"
         }
     },
+
+
     "authors": [
         {
-            "name": "Bakuk",
-            "email": "bakuk1996@mail.ru"
+            "name": "bakuk"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^8.0"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+
+    "license": "MIT"
 
 }
